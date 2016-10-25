@@ -6,6 +6,14 @@ There is a limitation where you can not set `timeout_msec` parameter that is inc
 
 In order for this to work you should use Kamino implementation of [dexmaker](https://github.com/kaminomobile/dexmaker).
 
+## Dependencies
+
+```
+dependencies {
+    androidTestCompile 'solar.blaz.android.test:android-mockito-runner:1.0'
+}
+```
+
 ## Usage
 
 Instead of using `@RunWith(AndroidJUnit4.class)` to annotate you Android test classes you should use `@RunWith(MockitoAndroidJUnit4.class)`.
