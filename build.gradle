@@ -1,0 +1,103 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'solar.blaz.android.test'
+version = '1.0'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.android.support.test:runner:0.5'
+    compile "org.mockito:mockito-core:1.10.19"
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+
+    publish = true
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'maven'
+        name = 'android-mockito-runner'
+        desc = 'An implementation of JUnit runner that combines AndroidJUnit4 and MockitoJUnit44Runner.'
+        websiteUrl = "https://github.com/blazsolar/AndroidMockitoRunner"
+        issueTrackerUrl = 'https://github.com/blazsolar/AndroidMockitoRunner/issues'
+        vcsUrl = "https://github.com/blazsolar/AndroidMockitoRunner"
+        licenses = ['MIT']
+        labels = ['aar', 'android', 'mockito', 'testing']
+        publicDownloadNumbers = true
+
+        githubRepo = 'blazsolar/AndroidMockitoRunner'
+        githubReleaseNotesFile = 'README.md'
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'An implementation of JUnit runner that combines AndroidJUnit4 and MockitoJUnit44Runner.'
+                url "https://github.com/blazsolar/AndroidMockitoRunner"
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'http://rem.mit-license.org'
+                    }
+                }
+                developers {
+                    developer {
+                        id "blazsolar"
+                        name "Blaz Solar"
+                    }
+                }
+                scm {
+                    url "https://github.com/blazsolar/AndroidMockitoRunner"
+                    connection "scm:git@github.com:blazsolar/AndroidMockitoRunner.git"
+                    developerConnection "scm:git@github.com:blazsolar/AndroidMockitoRunner.git"
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
